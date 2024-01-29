@@ -1,6 +1,7 @@
 package com.springauth.springauthplus.service;
 
 import java.time.Instant;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -282,8 +283,13 @@ public class JpaOAuth2AuthorizationService implements OAuth2AuthorizationService
     // helper methods
     private Map<String, Object> parseMap(String data) {
         try {
+            // 必须判断空值，不然会抛出参数异常，导致OAuth登录失败
+            if (data == null) {
+                return Collections.emptyMap();
+            }
             return this.objectMapper.readValue(data, new TypeReference<Map<String, Object>>() {
             });
+
         } catch (Exception ex) {
             throw new IllegalArgumentException(ex.getMessage(), ex);
         }

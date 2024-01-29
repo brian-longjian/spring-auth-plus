@@ -26,7 +26,7 @@ public class LoadDatabase {
 
     @Bean
     CommandLineRunner initDatabase(RegisteredClientRepository registeredClientRepository) {
-        // client自行注册
+        // client for self registration
         RegisteredClient adminClient = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("admin-client")
                 .clientSecret("{noop}secret")
@@ -47,17 +47,20 @@ public class LoadDatabase {
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
                 // nextjs客户端回调
-                .redirectUri("http://localhost:3000/api/auth/callback/my-oidc-provider")
+                .redirectUri("http://localhost:3000/api/auth/callback/my-provider")
                 .scope(OidcScopes.OPENID)
                 .scope(OidcScopes.PROFILE)
-                .scope("message.read")
-                .scope("message.write")
+                .scope(OidcScopes.EMAIL)
+                // .scope("client.create")
+                // .scope("client.read")
+                // .scope("message.read")
+                // .scope("message.write")
                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(false).build())
                 .build();
-        // app public client
-        // public client for mobile app
+    
+        // public client for mobile app or SPA
         RegisteredClient publicClient = RegisteredClient.withId(UUID.randomUUID().toString())
-                .clientId("app-client")
+                .clientId("public-client")
                 .clientIdIssuedAt(Instant.now())
                 .clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
