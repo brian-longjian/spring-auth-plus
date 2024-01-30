@@ -50,9 +50,8 @@ public class LoadDatabase {
                 .redirectUri("http://localhost:3000/api/auth/callback/my-provider")
                 .scope(OidcScopes.OPENID)
                 .scope(OidcScopes.PROFILE)
+                // 有些客户端sdk默认包括email scope。所以，如果不加上该scope，会导致授权失败
                 .scope(OidcScopes.EMAIL)
-                // .scope("client.create")
-                // .scope("client.read")
                 // .scope("message.read")
                 // .scope("message.write")
                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(false).build())
